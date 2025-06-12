@@ -29,37 +29,6 @@ cp .envExample .env
 
 5. Configure your `.env` file with your CPD environment details:
 
-# IBM Knowledge Catalog (IKC) Bulk Guru
-
-This repo demonstrates how the IKC API (formerly Watson Data Platform API) can be used to perform quick updates in bulk for some laborious tasks when done through the UI.
-
-## Prerequisites and Recommended Tools
-
-- Cloud Pak for Data `5.0` or above
-- Github Desktop <https://desktop.github.com/>
-- Git (optional for integration with VSC) <https://git-scm.com/downloads>
-- Python `3.8` or above <https://www.python.org/downloads/>
-- Visual Studio Code (VSC) <https://code.visualstudio.com/>
-- Python Extension of VSC <https://code.visualstudio.com/docs/python/python-tutorial>
-
-## Installation
-
-1. Make sure the prerequisites are installed.
-2. Clone this github repository.
-3. Install necessary dependencies:
-
-```sh
-pip install -r requirements.txt
-```
-
-4. Create `.env` file with Secrets:
-
-```sh
-cp .envExample .env
-```
-
-5. Configure your `.env` file with your CPD environment details:
-
 ### Environment Configuration Options
 
 The `.env` file supports multiple authentication methods and deployment types. Choose the configuration that matches your CPD environment:
