@@ -74,7 +74,7 @@ PROJECT_ID=your-project-id
 | `USERNAME` | Conditional | CPD username (required for SW environments) | `admin` |
 | `PASSWORD` | Conditional | CPD password (required when AUTH_TYPE=PASSWORD) | `your-secure-password` |
 | `API_KEY` | Conditional | API key (required for SAAS or when AUTH_TYPE=API_KEY) | `your-api-key` |
-| `CATALOG_ID` | Yes | Target catalog ID for asset operations | `12345678-1234-1234-1234-123456789abc` |
+| `CATALOG_ID` | Optional | Target catalog ID for asset operations | `12345678-1234-1234-1234-123456789abc` |
 | `PROJECT_ID` | Optional | Project ID for project-scoped operations | `87654321-4321-4321-4321-cba987654321` |
 
 #### How to Find Your Configuration Values
