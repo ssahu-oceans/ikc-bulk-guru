@@ -29,12 +29,126 @@ cp .envExample .env
 
 5. Configure your `.env` file with your CPD environment details:
 
-```env
-CPD_URL=https://your-cpd-cluster.com
-CPD_USERNAME=your-username
-CPD_PASSWORD=your-password
-CATALOG_ID=your-catalog-id
+# IBM Knowledge Catalog (IKC) Bulk Guru
+
+This repo demonstrates how the IKC API (formerly Watson Data Platform API) can be used to perform quick updates in bulk for some laborious tasks when done through the UI.
+
+## Prerequisites and Recommended Tools
+
+- Cloud Pak for Data `5.0` or above
+- Github Desktop <https://desktop.github.com/>
+- Git (optional for integration with VSC) <https://git-scm.com/downloads>
+- Python `3.8` or above <https://www.python.org/downloads/>
+- Visual Studio Code (VSC) <https://code.visualstudio.com/>
+- Python Extension of VSC <https://code.visualstudio.com/docs/python/python-tutorial>
+
+## Installation
+
+1. Make sure the prerequisites are installed.
+2. Clone this github repository.
+3. Install necessary dependencies:
+
+```sh
+pip install -r requirements.txt
 ```
+
+4. Create `.env` file with Secrets:
+
+```sh
+cp .envExample .env
+```
+
+5. Configure your `.env` file with your CPD environment details:
+
+### Environment Configuration Options
+
+The `.env` file supports multiple authentication methods and deployment types. Choose the configuration that matches your CPD environment:
+
+#### For Cloud Pak for Data Software (On-Premises) with Password Authentication
+```env
+CPD_HOST=your-cpd-cluster.com
+ENV_TYPE=SW
+AUTH_TYPE=PASSWORD
+USERNAME=your-username
+PASSWORD=your-password
+CATALOG_ID=your-catalog-id
+PROJECT_ID=your-project-id
+```
+
+#### For Cloud Pak for Data Software (On-Premises) with API Key Authentication
+```env
+CPD_HOST=your-cpd-cluster.com
+ENV_TYPE=SW
+AUTH_TYPE=API_KEY
+USERNAME=your-username
+API_KEY=your-api-key
+CATALOG_ID=your-catalog-id
+PROJECT_ID=your-project-id
+```
+
+#### For IBM Cloud Pak for Data as a Service (SaaS)
+```env
+CPD_HOST=your-cpd-saas-url.com
+ENV_TYPE=SAAS
+API_KEY=your-ibm-cloud-api-key
+CATALOG_ID=your-catalog-id
+PROJECT_ID=your-project-id
+```
+
+#### Environment Variables Reference
+
+| Variable | Required | Description | Example |
+|----------|----------|-------------|---------|
+| `CPD_HOST` | Yes | CPD cluster hostname (without https://) | `cpd-cluster.example.com` |
+| `ENV_TYPE` | No | Environment type: `SW` (software) or `SAAS` | `SW` (default) |
+| `AUTH_TYPE` | No | Authentication method: `PASSWORD` or `API_KEY` | `PASSWORD` (default) |
+| `USERNAME` | Conditional | CPD username (required for SW environments) | `admin` |
+| `PASSWORD` | Conditional | CPD password (required when AUTH_TYPE=PASSWORD) | `your-secure-password` |
+| `API_KEY` | Conditional | API key (required for SAAS or when AUTH_TYPE=API_KEY) | `your-api-key` |
+| `CATALOG_ID` | Yes | Target catalog ID for asset operations | `12345678-1234-1234-1234-123456789abc` |
+| `PROJECT_ID` | Optional | Project ID for project-scoped operations | `87654321-4321-4321-4321-cba987654321` |
+
+#### How to Find Your Configuration Values
+
+**CPD_HOST:**
+- For on-premises: Your CPD cluster URL without `https://`
+- For SaaS: Found in your IBM Cloud console
+
+**CATALOG_ID:**
+1. Log into your CPD web interface
+2. Navigate to **Data catalogs**
+3. Open your target catalog
+4. Find the catalog ID in the URL: `/data/catalogs/{CATALOG_ID}/`
+
+**API_KEY (for SaaS environments):**
+1. Go to [IBM Cloud API Keys](https://cloud.ibm.com/iam/apikeys)
+2. Create a new API key or use an existing one
+3. Ensure the key has appropriate permissions for your CPD instance
+
+**API_KEY (for on-premises with API key auth):**
+1. Log into CPD web interface
+2. Go to **Profile** → **API keys**
+3. Generate a new API key
+
+Reference: https://www.ibm.com/docs/en/cloud-paks/cp-data/5.1.x?topic=tutorials-generating-api-keys#api-keys__platform
+
+**PROJECT_ID (optional):**
+1. Navigate to **Projects** in CPD
+2. Open your target project
+3. Find the project ID in the URL: `/data/projects/{PROJECT_ID}/`
+
+#### Authentication Method Recommendations
+
+- **Password Authentication**: Simplest for development and testing
+- **API Key Authentication**: Recommended for production use and automation
+- **SaaS**: Always requires IBM Cloud API key authentication
+
+#### Security Notes
+
+- Never commit your `.env` file to version control
+- Use API keys instead of passwords for production environments
+- Rotate API keys regularly according to your security policies
+- Ensure your CPD user has appropriate permissions for catalog and asset operations
 
 ### Swagger UIs and other API docs
 
@@ -50,16 +164,6 @@ CATALOG_ID=your-catalog-id
 ## Use Cases
 
 Following are the key use cases that are covered in this repo:
-
-### How do I authenticate?
-
-- Session class
-- Hostname, User, Pwd or API Key
-- Headers, Token
-
-### How do I generate an API Key?
-
-https://www.ibm.com/docs/en/cloud-paks/cp-data/5.1.x?topic=tutorials-generating-api-keys#api-keys__platform
 
 ### How do I search for artifacts?
 
