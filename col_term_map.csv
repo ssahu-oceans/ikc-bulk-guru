@@ -1,0 +1,8 @@
+T_COUNTRY_CODES,CODE,Country Code,Location,Confidential,[uncategorized],Country Code,Location Data Classes
+T_COUNTRY_CODES,VALUE,County,Location,Confidential,[uncategorized],Country Name,Location Data Classes
+T_COUNTRY_CODES,DESCRIPTION,Country Name,Location,Confidential,[uncategorized],Country Name,Location Data Classes
+T_BI_TEST_PHONE,COUNTRY_CODE,Country Phone Code,Location,Confidential,[uncategorized],Country Name,Location Data Classes
+T_BI_TEST_PHONE,PHONE_NUMBER,Phone Number,Location,Confidential,[uncategorized],Country Name,Location Data Classes
+ASSET_TYPES,ASSET_TYPE,Country Name,Location,Confidential,[uncategorized],Country Name,Location Data Classes
+ASSET_TYPES,DESCRIPTION,Phone Number,Location,Confidential,[uncategorized],Country Name,Location Data Classes
+CHECKING,EVENT,Phone Number,Location,Confidential,[uncategorized],Country Name,Location Data Classes
