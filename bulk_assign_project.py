@@ -112,7 +112,7 @@ def get_data_class_id(primary_category: str, data_class_name: str) -> Optional[s
 
 def getAssetByName(client: CPDClient, name: str) -> str:
     """
-    This function retrieves the ID of an asset in a catalog based on its name.
+    This function retrieves the ID of an asset in a project based on its name.
     """
     url = f"/v2/asset_types/data_asset/search?project_id={project_id}&allow_metadata_on_dpr_deny=true"
     
@@ -124,7 +124,7 @@ def getAssetByName(client: CPDClient, name: str) -> str:
     response = client.post(url, json=payload)
     
     if response.status_code != 200:
-        raise ValueError(f"Error scanning catalog: {response.text}")
+        raise ValueError(f"Error scanning project: {response.text}")
     else:
         response_data = response.json()
         if response_data['total_rows'] != 1:
