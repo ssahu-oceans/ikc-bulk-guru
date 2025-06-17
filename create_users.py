@@ -21,13 +21,11 @@ def create_user_payload(username: str, display_name: str, email: str) -> Dict:
             "sign_in_only",
             "create_project"
         ],
-        "user_roles": [
-            "zen_user_role"
-        ],
+        "user_roles": [],
         "current_account_status": "enabled",
         "internal_user": False,
         "deletable": True,
-        "authenticator": "default",
+        "authenticator": "external",
         "role": "User"
     }
 
