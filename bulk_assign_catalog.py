@@ -200,6 +200,15 @@ def updateColumnInfoBulk(client: CPDClient, asset_id: str, asset_name: str, colu
             # Case 2b: both column_info and column exist - update specific attributes granularly
             print(f"  → Updating existing column {column_name}")
             
+            # Add description operation if description exists
+            if 'description' in column_data:
+                operations.append({
+                    "op": "add",
+                    "path": f"/entity/column_info/{column_name}/column_description",
+                    "value": column_data['description']
+                })
+                print(f"    • Adding description: {column_data['description'][:50]}{'...' if len(column_data['description']) > 50 else ''}")
+            
             # Add term assignment operation if terms exist
             if 'column_terms' in column_data:
                 operations.append({
@@ -338,18 +347,19 @@ def main(input_file):
             with open(input_filename) as csvfile:
                 reader = csv.reader(csvfile, skipinitialspace=True, delimiter=',')
                 for row_num, row in enumerate(reader, 1):
-                    if len(row) < 8:  # Ensure we have all required columns
+                    if len(row) < 9:  # Ensure we have all required columns
                         print(f"WARNING: Row {row_num} has insufficient columns, skipping")
                         continue
                     
                     asset_name = row[0]
                     column_name = row[1]
-                    term_name = row[2]
-                    term_category = row[3]
-                    classification_name = row[4]
-                    classification_category = row[5]
-                    data_class_name = row[6]
-                    data_class_category = row[7]
+                    column_description = row[2]
+                    term_name = row[3]
+                    term_category = row[4]
+                    classification_name = row[5]
+                    classification_category = row[6]
+                    data_class_name = row[7]
+                    data_class_category = row[8]
                     
                     print(f"\nProcessing row {row_num}: {asset_name}.{column_name}")
                     
@@ -359,6 +369,8 @@ def main(input_file):
                         'row_number': row_num,
                         'asset_name': asset_name,
                         'column_name': column_name,
+                        'column_description': column_description,
+                        'description_result': '',
                         'term_result': '',
                         'classification_result': '',
                         'data_class_result': '',
@@ -373,6 +385,7 @@ def main(input_file):
                         if not validateColumn(client, asset_id, column_name):
                             error_msg = f"Column '{column_name}' not found in asset"
                             print(f"  ✗ {error_msg}")
+                            result_row['description_result'] = f"ERROR: {error_msg}"
                             result_row['term_result'] = f"ERROR: {error_msg}"
                             result_row['classification_result'] = f"ERROR: {error_msg}"
                             result_row['data_class_result'] = f"ERROR: {error_msg}"
@@ -382,6 +395,14 @@ def main(input_file):
                         
                         # Build column data structure
                         column_data = {}
+                        
+                        # Process description assignment
+                        if column_description.strip():
+                            column_data['description'] = column_description.strip()
+                            result_row['description_result'] = "SUCCESS"
+                            print(f"  ✓ Description: {column_description[:50]}{'...' if len(column_description) > 50 else ''}")
+                        else:
+                            result_row['description_result'] = "SKIPPED: No description data"
                         
                         # Process term assignment
                         if term_name and term_category:
@@ -447,6 +468,7 @@ def main(input_file):
                     except AssertionError as msg:
                         error_msg = f"Asset error: {msg}"
                         print(f"  ✗ {error_msg}")
+                        result_row['description_result'] = f"ERROR: {error_msg}"
                         result_row['term_result'] = f"ERROR: {error_msg}"
                         result_row['classification_result'] = f"ERROR: {error_msg}"
                         result_row['data_class_result'] = f"ERROR: {error_msg}"
@@ -455,6 +477,7 @@ def main(input_file):
                     except Exception as e:
                         error_msg = f"Processing error: {e}"
                         print(f"  ✗ {error_msg}")
+                        result_row['description_result'] = f"ERROR: {error_msg}"
                         result_row['term_result'] = f"ERROR: {error_msg}"
                         result_row['classification_result'] = f"ERROR: {error_msg}"
                         result_row['data_class_result'] = f"ERROR: {error_msg}"
@@ -482,10 +505,10 @@ def main(input_file):
                 
                 # Write header
                 header = [
-                    'Asset Name', 'Column Name', 'Term Name', 'Term Category',
+                    'Asset Name', 'Column Name', 'Column Description', 'Term Name', 'Term Category',
                     'Classification Name', 'Classification Category', 
                     'Data Class Name', 'Data Class Category',
-                    'Term Result', 'Classification Result', 'Data Class Result',
+                    'Description Result', 'Term Result', 'Classification Result', 'Data Class Result',
                     'Asset Update Status'
                 ]
                 writer.writerow(header)
@@ -494,6 +517,7 @@ def main(input_file):
                 for result_row in results_data:
                     row = result_row['original_row']
                     output_row = row + [
+                        result_row['description_result'],
                         result_row['term_result'],
                         result_row['classification_result'],
                         result_row['data_class_result'],
@@ -518,10 +542,10 @@ def main(input_file):
         print("\n" + "="*60)
         print("PROCESS COMPLETED")
         print("="*60)
-        print("Term, classification, and data class assignment process completed.")
+        print("Column description, term, classification, and data class assignment process completed.")
         print(f"Detailed results saved to: {output_filename}")
 
 if __name__ == "__main__":
     # File format (without header):
-    # Asset Name,Column Name,Term Name,Term Category,Classification Name,Classification Category,Data Class Name,Data Class Category
+    # Asset Name,Column Name,Column Description,Term Name,Term Category,Classification Name,Classification Category,Data Class Name,Data Class Category
     main(input_file='col_term_map.csv')
