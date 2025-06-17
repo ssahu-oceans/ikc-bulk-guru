@@ -21,9 +21,9 @@ class CPDClient:
             config_file (str): Optional path to .env file
         """
         if config_file:
-            load_dotenv(config_file)
+            load_dotenv(config_file, override=True)
         else:
-            load_dotenv()
+            load_dotenv('.env', override=True)
             
         # Load configuration
         self.cpd_host = os.environ.get('CPD_HOST')
