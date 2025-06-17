@@ -168,7 +168,7 @@ Use the main bulk assignment script to assign governance artifacts to asset colu
 Create a CSV file with the following format (no header row required):
 
 ```csv
-Asset Name,Column Name,Term Name,Term Category,Classification Name,Classification Category,Data Class Name,Data Class Category
+Asset Name,Column Name,Column Description,Term Name,Term Category,Classification Name,Classification Category,Data Class Name,Data Class Category
 ```
 
 **Example CSV content:**
@@ -181,6 +181,7 @@ product_catalog,product_name,Product Name,Product Data,,,,
 **Column Descriptions:**
 - **Asset Name**: Exact name of the data asset in your catalog or project
 - **Column Name**: Exact name of the column within the asset
+- **Column Description**: Description of the column
 - **Term Name**: Business term to assign (leave empty to skip)
 - **Term Category**: Category where the term is located
 - **Classification Name**: Classification to assign (leave empty to skip)
