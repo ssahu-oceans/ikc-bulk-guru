@@ -223,6 +223,8 @@ def create_dq_definition(client: CPDClient, name: str, description: str, express
     Create a data quality definition.
     Returns the definition ID if successful, None otherwise.
     """
+    global _definitions_cache
+    
     url = f"/data_quality/v3/projects/{project_id}/definitions"
     
     payload = {
@@ -240,6 +242,21 @@ def create_dq_definition(client: CPDClient, name: str, description: str, express
         data = response.json()
         definition_id = data.get("id")
         print(f"  ✓ Created definition '{name}' with ID: {definition_id}")
+        
+        # Update the cache with the newly created definition
+        if _definitions_cache is not None:
+            new_definition = {
+                "id": definition_id,
+                "name": name,
+                "description": description,
+                "expression": expression,
+                "dimension": {"id": dimension_id}
+            }
+            # Add any other fields that might be in the response
+            new_definition.update(data)
+            _definitions_cache.append(new_definition)
+            print(f"  ✓ Updated definitions cache with new definition")
+        
         return definition_id
     else:
         print(f"  ✗ Error creating definition '{name}': {response.status_code} - {response.text}")
@@ -264,7 +281,10 @@ def get_or_create_dq_definition(client: CPDClient, name: str, description: str, 
         # Create new definition if it doesn't exist
         print(f"  → Definition '{name}' not found, creating new one...")
         definition_id = create_dq_definition(client, name, description, expression, dimension_id)
-        return definition_id, False
+        if definition_id:
+            return definition_id, False
+        else:
+            return None, False
     
 
 def create_dq_rule(client: CPDClient, rule_name: str, description: str, dimension_id: str, 
