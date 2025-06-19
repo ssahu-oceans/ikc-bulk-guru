@@ -1,10 +1,11 @@
 import os
 import csv
 from dotenv import load_dotenv
+from datetime import datetime
 from cpd_client import CPDClient
 from typing import Dict, List, Optional, Tuple
 
-load_dotenv()
+load_dotenv(override=True)
 
 # Environment variables
 project_id = os.environ.get('PROJECT_ID')
@@ -318,16 +319,12 @@ def preload_all_artifacts(client: CPDClient):
         _load_artifacts(client, artifact_type)
 
 
-def main(input_file):
+def main(input_filename):
     """Main execution function"""
-    
-    input_filename = input_file
-    
+        
     # Generate output filename based on input filename
-    if input_filename.endswith('.csv'):
-        output_filename = input_filename[:-4] + '_out.csv'
-    else:
-        output_filename = input_filename + '_out.csv'
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_filename = f"{input_filename.replace('.csv', '')}_out_{timestamp}.csv"
     
     print(f"Input file: {input_filename}")
     print(f"Output file: {output_filename}")
@@ -548,4 +545,4 @@ def main(input_file):
 if __name__ == "__main__":
     # File format (without header):
     # Asset Name,Column Name,Column Description,Term Name,Term Category,Classification Name,Classification Category,Data Class Name,Data Class Category
-    main(input_file='col_term_map.csv')
+    main(input_filename='col_term_map.csv')

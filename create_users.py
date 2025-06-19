@@ -1,11 +1,7 @@
-import os
 import csv
-from dotenv import load_dotenv
 from cpd_client import CPDClient
-from typing import Dict, List
-
-load_dotenv()
-
+from typing import Dict
+from datetime import datetime
 
 def create_user_payload(username: str, display_name: str, email: str) -> Dict:
     """
@@ -21,13 +17,11 @@ def create_user_payload(username: str, display_name: str, email: str) -> Dict:
             "sign_in_only",
             "create_project"
         ],
-        "user_roles": [
-            "zen_user_role"
-        ],
+        "user_roles": [],
         "current_account_status": "enabled",
         "internal_user": False,
         "deletable": True,
-        "authenticator": "default",
+        "authenticator": "external",
         "role": "User"
     }
 
@@ -85,16 +79,12 @@ def create_user(client: CPDClient, username: str, display_name: str, email: str)
         return f"ERROR: {error_msg}", None
 
 
-def main(input_file: str):
+def main(input_filename: str):
     """Main execution function"""
-    
-    input_filename = input_file
-    
+        
     # Generate output filename based on input filename
-    if input_filename.endswith('.csv'):
-        output_filename = input_filename[:-4] + '_out.csv'
-    else:
-        output_filename = input_filename + '_out.csv'
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_filename = f"{input_filename.replace('.csv', '')}_out_{timestamp}.csv"
     
     print(f"Input file: {input_filename}")
     print(f"Output file: {output_filename}")
@@ -231,4 +221,4 @@ if __name__ == "__main__":
     # Example:
     # John Smith,john.smith@company.com
     # Jane Doe,jane.doe@company.com
-    main(input_file='users.csv')
+    main(input_filename='users.csv')

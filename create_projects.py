@@ -1,10 +1,7 @@
-import os
 import csv
-from dotenv import load_dotenv
 from cpd_client import CPDClient
 from typing import Dict, List, Optional, Tuple
-
-load_dotenv()
+from datetime import datetime
 
 
 def extract_username_from_email(email_or_username: str) -> str:
@@ -286,16 +283,11 @@ def assign_collaborators(client: CPDClient, project_id: str, user_assignments: L
         return f"ERROR: {error_msg}"
 
 
-def main(input_file: str):
+def main(input_filename: str):
     """Main execution function"""
     
-    input_filename = input_file
-    
-    # Generate output filename based on input filename
-    if input_filename.endswith('.csv'):
-        output_filename = input_filename[:-4] + '_out.csv'
-    else:
-        output_filename = input_filename + '_out.csv'
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_filename = f"{input_filename.replace('.csv', '')}_out_{timestamp}.csv"
     
     print(f"Input file: {input_filename}")
     print(f"Output file: {output_filename}")
@@ -527,4 +519,4 @@ if __name__ == "__main__":
     # Example:
     # My Data Project,Analytics project for sales data,user1@company.com;user2@company.com
     # ML Pipeline,Machine learning project,user3@company.com;user4@company.com
-    main(input_file='projects.csv')
+    main(input_filename='projects.csv')
