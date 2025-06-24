@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script to export all CPD artifact types to CSV files using search API
+Script to export all CPD artifact types including reference data to CSV files using search API
 """
 
 import csv
@@ -122,7 +122,8 @@ def main():
     artifact_types = [
         "glossary_term",
         "data_class", 
-        "classification"
+        "classification",
+        "reference_data"
     ]
     
     print("Exporting CPD artifacts to CSV files...")
